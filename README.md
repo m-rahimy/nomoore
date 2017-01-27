@@ -8,10 +8,7 @@
 
 A short game about a girl who is not allowed to follow her dreams. Her name is Moore and her passion is drawing. She is in One Room that does not change, but time does..
 
-nO mooRe has been crafted in only 48 hours for the Ludum Dare 37 game development competition.
-
-It has been ranked on the 8th place (out of more than 900 other games) in category "Mood".
-<a href="http://ludumdare.com/compo/ludum-dare-37/?action=top&cat=Mood">http://ludumdare.com/compo/ludum-dare-37/?action=top&cat=Mood</a>
+nO mooRe has been crafted in only 48 hours for the Ludum Dare 37 game development competition. <a href="http://ludumdare.com/compo/ludum-dare-37/?action=top&cat=Mood">It has been ranked on the 8th place (out of more than 900 other games) in category "Mood".</a>
 
 You can follow me on my <a href="https://goo.gl/U0x1Fy">development blog</a> for the latest news on this and other projects of mine.
 
