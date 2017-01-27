@@ -1,40 +1,52 @@
-# nO mooRe
+noO mooRe <img src="excluded-resources/ic_launcher2.png" align="left" height="32" width="32" > <a href="https://www.youtube.com/channel/UCShL6kEbNc02XjA89zsrtDQ"><img src="https://www.youtube.com/yt/brand/media/image/YouTube-icon-full_color.png" height="32px" align="right"></a>
 
-*A short game about a girl who is not allowed to follow her dreams. Her name is Moore and her passion is drawing. She is in a room that does not change - but time does..*
+*One Room that doesn't change, but time does... Made in 48h for Ludum Dare 37.*
 
-[![version](https://img.shields.io/badge/version-1.0.1-2095ff.svg)](CHANGELOG.md) [![license](https://img.shields.io/badge/license-GPL--3.0-2095ff.svg)](LICENSE)
+[![version](https://img.shields.io/badge/version-1.1-2095ff.svg)](CHANGELOG.md)
+[![license](https://img.shields.io/badge/license-GPL--3.0-2095ff.svg)](LICENSE.md)
+[![download](https://img.shields.io/badge/download-play store-2095ff.svg)](https://goo.gl/Lza6Z7)
+
+A short game about a girl who is not allowed to follow her dreams. Her name is Moore and her passion is drawing. She is in One Room that does not change, but time does..
+
+nO mooRe has been crafted in only 48 hours for the Ludum Dare 37 game development competition.
+
+It has been ranked on the 8th place (out of more than 900 other games) in category "Mood".
+<a href="http://ludumdare.com/compo/ludum-dare-37/?action=top&cat=Mood">http://ludumdare.com/compo/ludum-dare-37/?action=top&cat=Mood</a>
 
 You can follow me on my <a href="https://goo.gl/U0x1Fy">development blog</a> for the latest news on this and other projects of mine.
 
-## Play
-<a href="http://therefactory.bplaced.net/data/nomoore/">http://therefactory.bplaced.net/data/nomoore/</a>
-
 ## Download
-<a href="https://github.com/frittatenbank/nOmooRe/raw/master/zip/nO-mooRe.zip">nO-mooRe.zip</a>
 
-## Older Releases
+App now available on Google Play Store.
 
-* <a href="https://github.com/frittatenbank/nOmooRe/raw/master/zip/nO-mooRe-1.0.0.zip">nO-mooRe-1.0.0.zip</a>
+<a href="https://goo.gl/Lza6Z7"><img src="http://therefactory.bplaced.net/img/google-play-badge.png" width="180"></a>
+
+## Timelapse Video
+
+Watch me crafting the game in this timelapse video. 
+
+<a href="https://www.youtube.com/watch?v=TJMfletLmAo"><img src="excluded-resources/youtube.png"></a>
 
 ## Screenshots
-<a href="http://ludumdare.com/compo/wp-content/compo2/593814/118598-shot0-1481505527.png"><img src="http://ludumdare.com/compo/wp-content/compo2/593814/118598-shot0-1481505527.png"  ></a>
 
-<a href="http://ludumdare.com/compo/wp-content/compo2/593814/118598-shot1-1481505527.png"><img src="http://ludumdare.com/compo/wp-content/compo2/593814/118598-shot1-1481505527.png" ></a>
+<a href="excluded-resources/screenshots/1.png"><img src="excluded-resources/screenshots/1.png" align="left" height="45%" width="45%" ></a>
 
-<a href="http://ludumdare.com/compo/wp-content/compo2/593814/118598-shot2-1481505527.png"><img src="http://ludumdare.com/compo/wp-content/compo2/593814/118598-shot2-1481505527.png"  ></a>
+<a href="excluded-resources/screenshots/2.png"><img src="excluded-resources/screenshots/2.png" align="left" height="45%" width="45%" ></a>
 
-## About
-Crafted in 48 hours for the Ludum Dare 37 competition using:
-- Java / libGDX
-- Paint.NET
-- Audacity
-- My Piano
-- Android Studio
-- Eclipse Neon
+<a href="excluded-resources/screenshots/3.png"><img src="excluded-resources/screenshots/3.png" align="left" height="45%" width="45%" ></a>
 
-## Known Issues
-- There are slight problems with the sound effects and music being synchronous to the animations.
-- Sometimes the music stops playing unexpectedly.
+## Gameplay
+
+Try to find items in the rooms and put them to new positions. There are a total of 3 cutscenes to unlock in the game.
+**Tip**: Sometimes, items that can be interacted with are subtly highlighted.
+
+## Bugs, Problems, Feedback?
+
+The more you tell me, the better my apps get. Please use the comments on <a href="https://goo.gl/Lza6Z7">Google Play Store</a> or visit <a href="http://goo.gl/KvKHze">my website</a> to post feedback. 
+
+## Permissions
+
+Your privacy is really important to me. Therefore does this app not require any permissions at all.
 
 ## License
 
@@ -43,11 +55,12 @@ Copyright &copy; 2016 Christian DeTamble
 Licensed under the GNU General Public License, Version 3.0. See [LICENSE](LICENSE) for details.
 
     https://www.gnu.org/licenses/gpl-3.0.txt
-    
+
+
+Game Idea, Sprites, Backgrounds and Music by The Refactory
+
 ***
 
-Crafted with &hearts; in <a href="http://goo.gl/KvKHze">The Refactory</a> in Barcelona 2016.
+Crafted with &hearts; in <a href="http://goo.gl/KvKHze">The Refactory</a> in Ebensee 2016.
 
-Developed in 48 hours for Ludum Dare 37.
-
-(My software is and stays open source, free of charge and ad-free.)
+(My software is and stays open source, free of charge and ad-free)
