@@ -28,7 +28,7 @@ Watch me crafting the game in this timelapse video.
 
 Listen to or download the full soundtrack that I have composed by myself for this game. 
 
-<a href="https://www.youtube.com/watch?v=TJMfletLmAo"><img src="excluded-resources/youtube2.png"></a>
+<a href="https://www.youtube.com/watch?v=k1211S-qUOw"><img src="excluded-resources/youtube2.png"></a>
 
 ## Screenshots
 
