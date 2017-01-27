@@ -1,4 +1,4 @@
-noO mooRe <img src="excluded-resources/ic_launcher2.png" align="left" height="32" width="32" > <a href="https://www.youtube.com/channel/UCShL6kEbNc02XjA89zsrtDQ"><img src="https://www.youtube.com/yt/brand/media/image/YouTube-icon-full_color.png" height="32px" align="right"></a>
+# nO mooRe <img src="excluded-resources/ic_launcher2.png" height="32"> <a href="https://www.youtube.com/channel/UCShL6kEbNc02XjA89zsrtDQ"><img src="https://www.youtube.com/yt/brand/media/image/YouTube-icon-full_color.png" height="32px" align="right"></a>
 
 *One Room that doesn't change, but time does... Made in 48h for Ludum Dare 37.*
 
@@ -25,19 +25,24 @@ App now available on Google Play Store.
 
 Watch me crafting the game in this timelapse video. 
 
-<a href="https://www.youtube.com/watch?v=TJMfletLmAo"><img src="excluded-resources/youtube.png"></a>
+<a href="https://www.youtube.com/watch?v=TJMfletLmAo"><img src="excluded-resources/youtube1.png"></a>
+
+## Soundtrack
+
+Listen to or download the full soundtrack that I have composed by myself for this game. 
+
+<a href="https://www.youtube.com/watch?v=TJMfletLmAo"><img src="excluded-resources/youtube2.png"></a>
 
 ## Screenshots
 
 <a href="excluded-resources/screenshots/1.png"><img src="excluded-resources/screenshots/1.png" align="left" height="45%" width="45%" ></a>
 
-<a href="excluded-resources/screenshots/2.png"><img src="excluded-resources/screenshots/2.png" align="left" height="45%" width="45%" ></a>
-
-<a href="excluded-resources/screenshots/3.png"><img src="excluded-resources/screenshots/3.png" align="left" height="45%" width="45%" ></a>
+<a href="excluded-resources/screenshots/2.png"><img src="excluded-resources/screenshots/2.png" height="45%" width="45%" ></a>
 
 ## Gameplay
 
 Try to find items in the rooms and put them to new positions. There are a total of 3 cutscenes to unlock in the game.
+
 **Tip**: Sometimes, items that can be interacted with are subtly highlighted.
 
 ## Bugs, Problems, Feedback?
