@@ -1,6 +1,12 @@
 nO mooRe - Changelog
 =========
 
+### Version 1.2 - February 3, 2017
+
+* Improved time traveling
+* Fixed inventory flickering
+* Made handles more subtle
+
 ### Version 1.1 - January 26, 2017
 
 * Made handles swipeable

@@ -20,8 +20,6 @@
 package net.bplaced.therefactory.nomoore.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
@@ -35,6 +33,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -46,7 +46,7 @@ import net.bplaced.therefactory.nomoore.entities.Interactable;
 import net.bplaced.therefactory.nomoore.utils.Particles;
 import net.bplaced.therefactory.nomoore.utils.Utils;
 
-public class ScreenGame extends ScreenAdapter implements InputProcessor {
+public class ScreenGame extends ScreenAdapter implements GestureListener {
 
 	private final SpriteBatch batch;
 	private final ShapeRenderer sr;
@@ -55,11 +55,10 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 	private final Particles particles;
 	private final MyGdxGame myGdxGame;
 	private final BitmapFont font;
-	private AssetManager assetManager;
 	private String message = "Seeing this picture I want to go to the past of this room..";
+	private GestureDetector gestureDetector;
 
 	private final Texture textureMedieval;
-	private final Texture textureModernTimes;
 
 	private final TextureRegion regionModernTimes;
 	private final TextureRegion regionStoneage;
@@ -122,11 +121,8 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 	private boolean bluenessRising;
 	private boolean dragsRightHandle = true;
 	private boolean dragsLeftHandle;
-	private boolean isDragging;
-	private boolean touchingRightHandle;
-	private boolean touchingLeftHandle;
-	private boolean interactableTouched;
 	private boolean scaleFactorRising;
+	private boolean flinging;
 
 	private final Sprite spriteStar;
 	private final Sprite human1;
@@ -134,8 +130,8 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 	private final Sprite pic;
 
 	private float blueness;
-	private float touchStartX;
 	private float scaleFactor = 1;
+	private float velX;
 
 	private final float[] starPositionsX;
 	private final float[] starPositionsY;
@@ -143,8 +139,6 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 
 	private final int numStars = Configuration.NUM_STARS;
 	private int numTouches;
-	private int pressedKey;
-	private int numPixelsToMoveHandles;
 
 	private final Sound soundSecretFound;
 	private final Sound soundIHavePaintedTheStone;
@@ -163,7 +157,9 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 		camera = myGdxGame.camera;
 		font = myGdxGame.font;
 
-		assetManager = new AssetManager();
+		gestureDetector = new GestureDetector(20, .5f, 2, .15f, this);
+
+		AssetManager assetManager = new AssetManager();
 		assetManager.load("music/3_mainTheme.mp3", Music.class);
 		assetManager.load("music/creepyDrums.mp3", Music.class);
 
@@ -200,12 +196,12 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 		handle = new Sprite(new Texture("sprites/handle.png"));
 
 		// backgrounds
-		textureModernTimes = new Texture("sprites/blue.png");
+		Texture textureModernTimes = new Texture("sprites/blue.png");
 		regionModernTimes = new TextureRegion(textureModernTimes);
 		textureMedieval = new Texture("sprites/red.png");
 		regionMedieval = new TextureRegion(textureMedieval);
-		Texture textureSteinzeit = new Texture("sprites/orange.png");
-		regionStoneage = new TextureRegion(textureSteinzeit);
+		Texture textureStoneAge = new Texture("sprites/orange.png");
+		regionStoneage = new TextureRegion(textureStoneAge);
 
 		rectangleRightHandle.setY((textureModernTimes.getHeight() / 2 - rectangleRightHandle.height / 2));
 		rectangleLeftHandle.setY(rectangleRightHandle.getY());
@@ -399,12 +395,11 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 		// assetManager.dispose();
 	}
 
-	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, blueness, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		update();
+		update(delta);
 
 		// draw outer black borders
 		sr.setProjectionMatrix(camera.combined);
@@ -419,8 +414,7 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 		// highlight selected item
 		if (selectedItemInInventory != null) {
 			sr.setColor(new Color(.25f, .25f, .25f, 1));
-			sr.circle(selectedItemInInventory.getSprite().getX() + selectedItemInInventory.getSprite().getWidth() / 2,
-					-35, 30);
+			sr.circle(selectedItemInInventory.getSprite().getX() + selectedItemInInventory.getSprite().getWidth() / 2, -35, 30);
 		}
 		sr.end();
 
@@ -445,23 +439,23 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 			font.draw(batch, message, textureMedieval.getWidth() / 2 - Utils.getFontWidth(message, font) / 2, 260);
 		}
 
-		// draw objects
+		// draw interactables
 		if (isBetweenMedievalAndModernTimes()) {
 			for (Interactable interactable : interactablesModernTimes) {
 				if (interactable.isVisible() && !interactable.isConsumed()) {
-					draw(batch, interactable.getSprite(), 2, interactable);
+					drawSprite(batch, interactable.getSprite(), 2, interactable);
 				}
 			}
 		}
 		for (Interactable interactable : interactablesMedieval) {
 			if (interactable.isVisible() && !interactable.isConsumed()) {
-				draw(batch, interactable.getSprite(), 1, interactable);
+				drawSprite(batch, interactable.getSprite(), 1, interactable);
 			}
 		}
 		if (isBetweenStoneAgeAndMedieval() && !dragsRightHandle) {
 			for (Interactable interactable : interactablesStoneAge) {
 				if (interactable.isVisible() && !interactable.isConsumed()) {
-					draw(batch, interactable.getSprite(), 0, interactable);
+					drawSprite(batch, interactable.getSprite(), 0, interactable);
 				}
 			}
 		}
@@ -469,37 +463,27 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 		// handles
 		if (!gameOver && isBetweenMedievalAndModernTimes()) {
 			// hide right handle if between stone age and medieval
-			batch.draw(handle.getTexture(), rectangleRightHandle.x, rectangleRightHandle.y, rectangleRightHandle.width,
-					rectangleRightHandle.height);
+			batch.draw(handle.getTexture(), (int) rectangleRightHandle.x, rectangleRightHandle.y, rectangleRightHandle.width, rectangleRightHandle.height);
 		}
 		if (!gameOver && isBetweenStoneAgeAndMedieval()) {
 			// hide left handle if between medieval and modern times
-			batch.draw(handle.getTexture(), rectangleLeftHandle.x, rectangleLeftHandle.y, rectangleLeftHandle.width,
-					rectangleLeftHandle.height);
+			batch.draw(handle.getTexture(), (int) rectangleLeftHandle.x, rectangleLeftHandle.y, rectangleLeftHandle.width, rectangleLeftHandle.height);
 		}
 
 		// fire effects
 		if (renderBigFire) {
-			if (rectangleRightHandle.getX() > fireplace.getSprite().getX() + 30
-					&& rectangleLeftHandle.getX() < fireplace.getSprite().getX() + 30) {
-				particles.renderBigFire(batch, delta, fireplace.getSprite().getX() + 30,
-						fireplace.getSprite().getY() + 20);
+			if (rectangleRightHandle.getX() > fireplace.getSprite().getX() + 30 && rectangleLeftHandle.getX() < fireplace.getSprite().getX() + 30) {
+				particles.renderBigFire(batch, delta, fireplace.getSprite().getX() + 30, fireplace.getSprite().getY() + 20);
 			}
 		} else if (renderSmallFire) {
-			if (rectangleRightHandle.getX() > fireplace.getSprite().getX() + 30
-					&& rectangleLeftHandle.getX() < fireplace.getSprite().getX() + 30) {
-				particles.renderSmallFire(batch, delta, fireplace.getSprite().getX() + 30,
-						fireplace.getSprite().getY() + 20);
+			if (rectangleRightHandle.getX() > fireplace.getSprite().getX() + 30 && rectangleLeftHandle.getX() < fireplace.getSprite().getX() + 30) {
+				particles.renderSmallFire(batch, delta, fireplace.getSprite().getX() + 30, fireplace.getSprite().getY() + 20);
 			}
 		}
 
 		// inventory
-		int x = 20;
-		for (int i = 0; i < inventory.size; i++) {
-			Interactable interactable = inventory.get(i);
-			interactable.setPosition(x, -50);
+		for (Interactable interactable : inventory) {
 			interactable.getSprite().draw(batch);
-			x += interactable.getSprite().getWidth() + 20;
 		}
 
 		if (gameOver) {
@@ -535,33 +519,16 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 		batch.end();
 	}
 
-	private void update() {
-		numPixelsToMoveHandles = Math.min(Configuration.MAX_NUM_PIXELS_TO_MOVE_HANDLES,
-				Math.abs(Gdx.input.getDeltaX()));
-
-		// keyboard and touch input
-		if (pressedKey == Keys.LEFT || pressedKey == Keys.A || isDragging && Gdx.input.getDeltaX() < 0) {
-			if (rectangleLeftHandle.getX() > 0) {
-				rectangleLeftHandle.setX(Math.max(0, rectangleLeftHandle.getX() - numPixelsToMoveHandles));
-				dragsLeftHandle = true;
-				dragsRightHandle = false;
-			} else if (rectangleRightHandle.getX() > 0) {
-				rectangleRightHandle.setX(Math.max(0, rectangleRightHandle.getX() - numPixelsToMoveHandles));
-				dragsLeftHandle = false;
-				dragsRightHandle = true;
-			}
-		} else if (pressedKey == Keys.RIGHT || pressedKey == Keys.D || isDragging && Gdx.input.getDeltaX() > 0) {
-			if (rectangleRightHandle.getX() < textureMedieval.getWidth()) {
-				rectangleRightHandle.setX(
-						Math.min(textureModernTimes.getWidth(), rectangleRightHandle.getX() + numPixelsToMoveHandles));
-				dragsLeftHandle = false;
-				dragsRightHandle = true;
-			} else if (rectangleLeftHandle.getX() < textureMedieval.getWidth()) {
-				rectangleLeftHandle.setX(
-						Math.min(textureMedieval.getWidth(), rectangleLeftHandle.getX() + numPixelsToMoveHandles));
-				dragsLeftHandle = true;
-				dragsRightHandle = false;
-			}
+	private void update(float delta) {
+		// touch input
+		if (flinging) {
+			velX *= .85f;
+			if (rectangleLeftHandle.getX() > 0)
+				rectangleLeftHandle.setX(Math.min(textureMedieval.getWidth(), Math.max(0, rectangleLeftHandle.getX() + velX * delta)));
+			else
+				rectangleRightHandle.setX(Math.min(textureMedieval.getWidth(), Math.max(0, rectangleRightHandle.getX() + velX * delta)));
+			if (Math.abs(velX) < .01f)
+				velX = 0;
 		}
 
 		// backgrounds
@@ -615,7 +582,7 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 			message = "What a beautiful pain ting.";
 	}
 
-	private void draw(SpriteBatch batch, Sprite sprite, int scene, Interactable interactable) {
+	private void drawSprite(SpriteBatch batch, Sprite sprite, int scene, Interactable interactable) {
 		if (interactable.isConsumed()) {
 			sprite.draw(batch);
 			return;
@@ -633,12 +600,8 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 			percentage = 1 - percentage;
 		}
 		int visibleWidth = (int) (sprite.getWidth() * percentage);
-		batch.draw(sprite.getTexture(), (reverseDirection ? sprite.getWidth() - visibleWidth : 0) + sprite.getX(),
-				sprite.getY(), sprite.getWidth() / 2, sprite.getHeight() / 2, visibleWidth, sprite.getHeight(),
-				sprite.getScaleX() * (interactable.isConsumable() ? scaleFactor : 1),
-				sprite.getScaleY() * (interactable.isConsumable() ? scaleFactor : 1), 0, sprite.getRegionX(),
-				sprite.getRegionY(), (int) (sprite.getRegionWidth() * percentage), sprite.getRegionHeight(),
-				reverseDirection, false);
+		batch.draw(sprite.getTexture(), (reverseDirection ? sprite.getWidth() - visibleWidth : 0) + sprite.getX(), sprite.getY(), sprite.getWidth() / 2, sprite.getHeight() / 2, visibleWidth, sprite.getHeight(), sprite.getScaleX() * (interactable.isConsumable() ? scaleFactor : 1),
+				sprite.getScaleY() * (interactable.isConsumable() ? scaleFactor : 1), 0, sprite.getRegionX(), sprite.getRegionY(), (int) (sprite.getRegionWidth() * percentage), sprite.getRegionHeight(), reverseDirection, false);
 	}
 
 	private boolean isBetweenStoneAgeAndMedieval() {
@@ -654,75 +617,8 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 		viewport.update(width, height);
 	}
 
-	@Override
-	public boolean keyDown(int keycode) {
-		pressedKey = keycode;
-		return false;
-	}
-
-	@Override
-	public boolean keyUp(int keycode) {
-		pressedKey = -1;
-		return false;
-	}
-
-	@Override
-	public boolean keyTyped(char character) {
-		return false;
-	}
-
-	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		if (gameOver) {
-			numTouches++;
-			return false;
-		}
-
-		if (showMedievalCutscene) {
-			showMedievalCutscene = false;
-			myGdxGame.showMedievalCutscene();
-		} else if (showStoneAgeCutscene) {
-			showStoneAgeCutscene = false;
-			myGdxGame.showStoneAgeCutscene();
-		}
-
-		touchCoordinates.set(screenX, screenY);
-		unprojectedCoordinates = viewport.unproject(touchCoordinates);
-		touchStartX = unprojectedCoordinates.x;
-
-		touchingRightHandle = rectangleRightHandle.contains(unprojectedCoordinates)
-				&& isBetweenMedievalAndModernTimes();
-		touchingLeftHandle = rectangleLeftHandle.contains(unprojectedCoordinates) && isBetweenStoneAgeAndMedieval();
-
-		if (touchingRightHandle || touchingLeftHandle) {
-			dragsLeftHandle = touchingLeftHandle;
-			dragsRightHandle = touchingRightHandle;
-		}
-
-		previousPositionOfRightHandle.set(rectangleRightHandle.getX(), rectangleRightHandle.getY());
-		previousPositionOfLeftHandle.set(rectangleLeftHandle.getX(), rectangleLeftHandle.getY());
-
-		// handle touches on interactables
-		if (!touchingRightHandle && !touchingLeftHandle && !isDragging && !showMooresDrawing) {
-			for (Interactable interactable : interactablesModernTimes) {
-				handleTouchOnInteractable(interactable, 2);
-			}
-			for (Interactable interactable : interactablesMedieval) {
-				handleTouchOnInteractable(interactable, 1);
-			}
-			for (Interactable interactable : interactablesStoneAge) {
-				handleTouchOnInteractable(interactable, 0);
-			}
-		} else if (showMooresDrawing) {
-			showMooresDrawing = false;
-			interactableTouched = true;
-		}
-		return false;
-	}
-
 	private void handleTouchOnInteractable(Interactable interactable, int scene) {
-		if (interactable.isVisible()
-				&& interactable.getSprite().getBoundingRectangle().contains(unprojectedCoordinates)) {
+		if (interactable.isVisible() && interactable.getSprite().getBoundingRectangle().contains(unprojectedCoordinates)) {
 			switch (scene) {
 			case 0:
 				handleTouchesInStoneAge(interactable);
@@ -738,7 +634,6 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 			// item in the inventory touched
 			if (inventory.contains(interactable, true) && interactable.isConsumed()) {
 				toggleInventoryItem(interactable);
-				interactableTouched = true;
 			}
 
 		}
@@ -747,7 +642,6 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 	private void handleTouchesInModernTimes(Interactable interactable) {
 		if (rectangleRightHandle.getX() < interactable.getSprite().getX()) {
 			if (interactable.equals(daddy)) {
-				interactableTouched = true;
 				if (selectedItemInInventory != null && selectedItemInInventory.equals(scalpel)) {
 					if (inventory.contains(goblet, true)) {
 						inventory.removeValue(selectedItemInInventory, true);
@@ -756,10 +650,11 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 						gobletBloody.setVisible(true);
 						gobletBloody.setConsumed(true);
 						gobletBloody.setConsumable(false);
-						inventory.add(gobletBloody);
+						consumeInteractable(gobletBloody);
 						selectedItemInInventory = gobletBloody;
 						message = "I have cut.";
 						soundCut.play();
+						sortInventory();
 					} else {
 						message = "I want to cut, but I need something to collect the blood.";
 						goblet.setConsumable(true);
@@ -782,7 +677,6 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 					}
 				}
 			} else if (interactable.equals(moore)) {
-				interactableTouched = true;
 				moore.setConsumable(false);
 				message = "Daddy?";
 				rectangleRightHandle.setX(0);
@@ -792,7 +686,6 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 				if (musicMainTheme.isPlaying())
 					musicMainTheme.pause();
 			} else if (interactable.equals(easel)) {
-				interactableTouched = true;
 				if (selectedItemInInventory != null && selectedItemInInventory.equals(canvas)) {
 					inventory.removeValue(selectedItemInInventory, true);
 					canvas.setPosition(easel.getSprite().getX() + 3, easel.getSprite().getY() + 20);
@@ -804,6 +697,7 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 					rock.setVisible(true);
 					easel.setConsumable(false);
 					soundSecretFound.play();
+					sortInventory();
 				} else {
 					if (iHavePutTheCanvas) {
 						message = "I have moore space to draw now.";
@@ -812,7 +706,6 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 					}
 				}
 			} else if (interactable.equals(fridge)) {
-				interactableTouched = true;
 				if (iHaveBurned) {
 					// the fridge opens
 					if (fridge.isVisible()) {
@@ -839,17 +732,15 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 				}
 			} else {
 				if (interactable.isConsumable() && !interactable.isConsumed()) {
-					interactableTouched = true;
 					if (interactable.equals(milk)) {
-						if (hintFoundWhatToDraw) { // only pick up if already
-													// know what to draw
+						if (hintFoundWhatToDraw) { // only pick up if already know what to draw
 							interactable.setConsumed(true);
-							inventory.add(interactable);
+							consumeInteractable(interactable);
 							soundItemPickup.play();
 						}
 					} else {
 						interactable.setConsumed(true);
-						inventory.add(interactable);
+						consumeInteractable(interactable);
 						soundItemPickup.play();
 					}
 					if (interactable.equals(canvas))
@@ -860,8 +751,7 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 	}
 
 	private void handleTouchesInMedieval(Interactable interactable) {
-		if (rectangleLeftHandle.getX() < interactable.getSprite().getX()
-				&& interactable.getSprite().getX() < rectangleRightHandle.getX()) {
+		if (rectangleLeftHandle.getX() < interactable.getSprite().getX() && interactable.getSprite().getX() < rectangleRightHandle.getX()) {
 			if (interactable.equals(fireplace)) {
 				if (selectedItemInInventory == null) { // nothing selected
 					handleTouchOnFirePlaceIfNothingSelectedInInventory();
@@ -876,6 +766,7 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 						iHaveBurned = true;
 						showMedievalCutscene = true;
 						soundSecretFound.play();
+						sortInventory();
 					} else {
 						message = "I want to burn, but something is missing..";
 					}
@@ -887,10 +778,11 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 						interactablesStoneAge.removeValue(straw, true);
 						interactablesMedieval.removeValue(straw, true);
 						selectedItemInInventory = null;
-						message = "The fire is still glowing too weakly.";
+						message = "The fire is still glowing too weak.";
 						fireIsGlowingWeakly = true;
 						renderSmallFire = true;
 						soundFireIgnited.play();
+						sortInventory();
 					} else {
 						message = "I want to burn, but something is missing..";
 					}
@@ -904,6 +796,7 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 					selectedItemInInventory = null;
 					message = "I have put the straw.";
 					iHavePutTheStraw = true;
+					sortInventory();
 				} else if (selectedItemInInventory.equals(firewood)) {
 					inventory.removeValue(selectedItemInInventory, true);
 					firewood.setPosition(fireplace.getSprite().getX() + 4, fireplace.getSprite().getY() - 5);
@@ -912,23 +805,22 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 					selectedItemInInventory = null;
 					message = "I have put the firewood.";
 					iHavePutTheWood = true;
+					sortInventory();
 				} else { // nothing selected
 					handleTouchOnFirePlaceIfNothingSelectedInInventory();
 				}
 			} else {
 				if (interactable.isConsumable() && !interactable.isConsumed()) {
-					interactableTouched = true;
 					if (interactable.equals(charcoal)) {
-						if (hintFoundWhatToDraw) { // only pick up if already
-													// know what to draw
+						if (hintFoundWhatToDraw) { // only pick up if already know what to draw
 							interactable.setConsumed(true);
-							inventory.add(interactable);
+							consumeInteractable(interactable);
 							soundItemPickup.play();
 							renderSmallFire = false;
 						}
 					} else {
 						interactable.setConsumed(true);
-						inventory.add(interactable);
+						consumeInteractable(interactable);
 						soundItemPickup.play();
 					}
 				}
@@ -940,7 +832,7 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 		if (iHaveBurned) {
 			message = "I have burned.";
 		} else if (fireIsGlowingWeakly) {
-			message = "The fire is still glowing too weakly.";
+			message = "The fire is still glowing too weak.";
 		} else {
 			message = "I want to burn, but something is missing..";
 		}
@@ -974,6 +866,7 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 						message = "No moore blood to shed.";
 						paintedRed = true;
 						soundIHavePaintedTheStone.play();
+						sortInventory();
 					} else if (selectedItemInInventory.equals(charcoal)) {
 						inventory.removeValue(charcoal, true);
 						picBlack.setVisible(true);
@@ -981,6 +874,7 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 						message = "No moore flesh to burn.";
 						paintedBlack = true;
 						soundIHavePaintedTheStone.play();
+						sortInventory();
 					} else if (selectedItemInInventory.equals(milk)) {
 						inventory.removeValue(milk, true);
 						picWhite.setVisible(true);
@@ -988,6 +882,7 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 						message = "No moore girl to humiliate.";
 						paintedWhite = true;
 						soundIHavePaintedTheStone.play();
+						sortInventory();
 					} else {
 						if (paintedBlack && paintedRed && paintedWhite) {
 							message = "..";
@@ -1002,9 +897,8 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 					daddy.setConsumable(true);
 				}
 			} else if (interactable.isConsumable() && !interactable.isConsumed()) {
-				interactableTouched = true;
 				interactable.setConsumed(true);
-				inventory.add(interactable);
+				consumeInteractable(interactable);
 				soundItemPickup.play();
 			}
 		}
@@ -1018,57 +912,29 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 				selectedItemInInventory = null;
 				message = "";
 			} else {
-				selectedItemInInventory = interactable; // instantly select
-														// after consume
+				selectedItemInInventory = interactable; // instantly select after consume
 			}
 		}
 		if (selectedItemInInventory != null)
 			message = "This is a " + interactable.getName() + ".";
 	}
 
-	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		isDragging = false;
-		touchingLeftHandle = false;
-		touchingRightHandle = false;
-		interactableTouched = false;
-		return false;
+	private void consumeInteractable(Interactable interactable) {
+		int x = 20;
+		for (int i = 0; i < inventory.size; i++) {
+			x += inventory.get(i).getSprite().getWidth() + 20;
+		}
+		interactable.setPosition(x, -50);
+		inventory.add(interactable);
 	}
 
-	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		if (gameOver || interactableTouched)
-			return false;
-
-		isDragging = true;
-		touchCoordinates.set(screenX, screenY);
-		unprojectedCoordinates = viewport.unproject(touchCoordinates);
-
-		// if (touchingRightHandle) {
-		// float newX = previousPositionOfRightHandle.x +
-		// (unprojectedCoordinates.x - touchStartX);
-		// rectangleRightHandle.setX(Math.min(textureModernTimes.getWidth(),
-		// Math.max(0, newX)));
-		// } else if (touchingLeftHandle) {
-		// float newX = previousPositionOfLeftHandle.x +
-		// (unprojectedCoordinates.x - touchStartX);
-		// rectangleLeftHandle.setX(Math.min(textureMedieval.getWidth(),
-		// Math.max(0, newX)));
-		// }
-
-		return false;
-	}
-
-	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean scrolled(int amount) {
-		// TODO Auto-generated method stub
-		return false;
+	private void sortInventory() {
+		int x = 20;
+		for (int i = 0; i < inventory.size; i++) {
+			Interactable interactable = inventory.get(i);
+			interactable.setPosition(x, -50);
+			x += interactable.getSprite().getWidth() + 20;
+		}
 	}
 
 	@Override
@@ -1080,7 +946,7 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 			if (!musicMainTheme.isPlaying())
 				musicMainTheme.play();
 		}
-		Gdx.input.setInputProcessor(this);
+		Gdx.input.setInputProcessor(gestureDetector);
 	}
 
 	@Override
@@ -1098,5 +964,113 @@ public class ScreenGame extends ScreenAdapter implements InputProcessor {
 			musicMainTheme.pause();
 		}
 		musicMainTheme.dispose();
+	}
+
+	@Override
+	public boolean touchDown(float x, float y, int pointer, int button) {
+		flinging = false;
+		return false;
+	}
+
+	@Override
+	public boolean tap(float x, float y, int count, int button) {
+		// Gdx.app.log("GestureDetectorTest", "tap at " + x + ", " + y + ", count: " + count);
+		if (gameOver) {
+			numTouches++;
+			return true;
+		}
+
+		if (showMedievalCutscene) {
+			showMedievalCutscene = false;
+			myGdxGame.showMedievalCutscene();
+		} else if (showStoneAgeCutscene) {
+			showStoneAgeCutscene = false;
+			myGdxGame.showStoneAgeCutscene();
+		}
+
+		touchCoordinates.set(x, y);
+		unprojectedCoordinates = viewport.unproject(touchCoordinates);
+
+		boolean touchingRightHandle = rectangleRightHandle.contains(unprojectedCoordinates) && isBetweenMedievalAndModernTimes();
+		boolean touchingLeftHandle = rectangleLeftHandle.contains(unprojectedCoordinates) && isBetweenStoneAgeAndMedieval();
+
+		if (touchingRightHandle || touchingLeftHandle) {
+			dragsLeftHandle = touchingLeftHandle;
+			dragsRightHandle = touchingRightHandle;
+		}
+
+		previousPositionOfRightHandle.set(rectangleRightHandle.getX(), rectangleRightHandle.getY());
+		previousPositionOfLeftHandle.set(rectangleLeftHandle.getX(), rectangleLeftHandle.getY());
+
+		// handle touches on interactables
+		if (!touchingRightHandle && !touchingLeftHandle && !showMooresDrawing) {
+			for (Interactable interactable : interactablesModernTimes) {
+				handleTouchOnInteractable(interactable, 2);
+			}
+			for (Interactable interactable : interactablesMedieval) {
+				handleTouchOnInteractable(interactable, 1);
+			}
+			for (Interactable interactable : interactablesStoneAge) {
+				handleTouchOnInteractable(interactable, 0);
+			}
+		} else if (showMooresDrawing) {
+			showMooresDrawing = false;
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean longPress(float x, float y) {
+		return false;
+	}
+
+	@Override
+	public boolean fling(float velocityX, float velocityY, int button) {
+		// Gdx.app.log("GestureDetectorTest", "fling " + velocityX + ", " +
+		// velocityY);
+		flinging = true;
+		velX = velocityX * .3f;
+		return false;
+	}
+
+	@Override
+	public boolean pan(float x, float y, float deltaX, float deltaY) {
+		// Gdx.app.log("GestureDetectorTest", "pan at " + x + ", " + y);
+		if (showMooresDrawing) {
+			showMooresDrawing = false;
+		}
+		deltaX *= viewport.getWorldWidth() / (float) viewport.getScreenWidth();
+		dragsLeftHandle = rectangleLeftHandle.getX() > 0 || rectangleLeftHandle.getX() == 0 && rectangleRightHandle.getX() >= textureMedieval.getWidth() && deltaX > 0;
+		dragsRightHandle = !dragsLeftHandle;
+		if (dragsLeftHandle) {
+			rectangleLeftHandle.setX(Math.min(textureMedieval.getWidth(), Math.max(0, rectangleLeftHandle.getX() + deltaX)));
+		} else {
+			rectangleRightHandle.setX(Math.min(textureMedieval.getWidth(), Math.max(0, rectangleRightHandle.getX() + deltaX)));
+		}
+		return true;
+	}
+
+	@Override
+	public boolean panStop(float x, float y, int pointer, int button) {
+		// Gdx.app.log("GestureDetectorTest", "pan stop at " + x + ", " + y);
+		return false;
+	}
+
+	@Override
+	public boolean zoom(float initialDistance, float distance) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void pinchStop() {
+		// TODO Auto-generated method stub
 	}
 }

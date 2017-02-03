@@ -53,7 +53,7 @@ public class AndroidLauncher extends AndroidApplication implements IAndroidInter
 		AudioManager mAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 		if (mAudioManager.isMusicActive()) {
 		    Intent i = new Intent(SERVICECMD);
-		    i.putExtra(CMDNAME, CMDSTOP );
+		    i.putExtra(CMDNAME, CMDSTOP);
 		    AndroidLauncher.this.sendBroadcast(i);
 		}
 	}

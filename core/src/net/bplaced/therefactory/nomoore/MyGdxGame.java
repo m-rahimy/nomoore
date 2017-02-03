@@ -72,8 +72,7 @@ public class MyGdxGame extends Game {
 
 		camera = new OrthographicCamera();
 		viewport = new FitViewport(Configuration.WINDOW_WIDTH, Configuration.WINDOW_HEIGHT, camera);
-		camera.position.set(viewport.getWorldWidth() / 2 - (viewport.getWorldWidth() - 500) / 2,
-				viewport.getWorldHeight() / 2 - (viewport.getWorldHeight() - 220) / 2, 0);
+		camera.position.set(viewport.getWorldWidth() / 2 - (viewport.getWorldWidth() - 500) / 2, viewport.getWorldHeight() / 2 - (viewport.getWorldHeight() - 220) / 2, 0);
 		camera.update();
 
 		fade = new Sprite(new Texture("sprites/fade.png"));
@@ -81,8 +80,8 @@ public class MyGdxGame extends Game {
 
 		font = new BitmapFont(Gdx.files.internal("fonts/amiga4everpro2.fnt"));
 
-        showModernTimesCutscene(); // start the game
-		//showGameScreen();
+		showModernTimesCutscene(); // start the game
+		// showGameScreen();
 	}
 
 	private void showModernTimesCutscene() {

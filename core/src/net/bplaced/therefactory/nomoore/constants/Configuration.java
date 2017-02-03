@@ -25,6 +25,5 @@ public class Configuration {
 	public static final int WINDOW_HEIGHT = 360;
 	public static final float ANIMATION_SPEED_OF_BREATHING_SKYCOLOR = .001f;
 	public static final int NUM_STARS = 30;
-	public static final int MAX_NUM_PIXELS_TO_MOVE_HANDLES = 17;
 
 }
