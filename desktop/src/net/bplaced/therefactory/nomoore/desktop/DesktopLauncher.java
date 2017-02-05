@@ -32,9 +32,9 @@ public class DesktopLauncher {
 		config.width = (int) (Configuration.WINDOW_WIDTH * scale);
 		config.height = (int) (Configuration.WINDOW_HEIGHT * scale);
 		config.title = "nO mooRe";
-		// config.fullscreen = true;
+		config.fullscreen = true;
 		config.vSyncEnabled = true;
-		// config.resizable = false;
+		config.resizable = false;
 		new LwjglApplication(new MyGdxGame(), config);
 	}
 }
