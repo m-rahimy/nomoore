@@ -664,13 +664,14 @@ public class ScreenGame extends ScreenAdapter implements GestureListener {
 				} else if (!(paintedBlack && paintedRed && paintedWhite)) {
 					showMooresDrawing = true;
 					if (searchingForWhatToDraw) {
-						scalpel.setConsumable(true);
 						message = "She is no moore.. but was so red, black and white.";
 						if (!hintFoundWhatToDraw) {
 							soundSecretFound.play();
 							daddy.setConsumable(false);
 						}
 						milk.setConsumable(true);
+						scalpel.setConsumable(true);
+						charcoal.setConsumable(true);
 						hintFoundWhatToDraw = true;
 					} else {
 						message = "She is no moore..";
@@ -719,7 +720,6 @@ public class ScreenGame extends ScreenAdapter implements GestureListener {
 
 						// fire disappears and leaves charcoal for drawing
 						// purposes
-						charcoal.setConsumable(true);
 						charcoal.setVisible(true);
 						fireplaceUsed.setVisible(true);
 						interactablesMedieval.removeValue(firewood, true);
