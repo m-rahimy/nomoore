@@ -1,6 +1,13 @@
 nO mooRe - Changelog
 =========
 
+### Version 1.3 - March 5, 2017
+
+* Improved synchronization between Animation and Music
+* Decreased swipe speed after last cutscene
+* Fixed bug with last message not showing when painting the stone
+* Fixed text errors
+
 ### Version 1.2 - February 3, 2017
 
 * Improved time traveling
