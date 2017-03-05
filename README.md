@@ -2,7 +2,7 @@
 
 *One Room that doesn't change, but time does... Made in 48h for Ludum Dare 37.*
 
-[![version](https://img.shields.io/badge/version-1.2-2095ff.svg)](CHANGELOG.md)
+[![version](https://img.shields.io/badge/version-1.3-2095ff.svg)](CHANGELOG.md)
 [![license](https://img.shields.io/badge/license-GPL--3.0-2095ff.svg)](LICENSE.md)
 [![download](https://img.shields.io/badge/download-play store-2095ff.svg)](https://goo.gl/Lza6Z7)
 
@@ -17,6 +17,12 @@ You can follow me on my <a href="https://goo.gl/U0x1Fy">development blog</a> for
 App now available on Google Play Store.
 
 <a href="https://goo.gl/Lza6Z7"><img src="http://therefactory.bplaced.net/img/google-play-badge.png" width="180"></a>
+
+Or download the <a href="dist/nO%20mooRe.zip?raw=true">Java Version for Windows/Linux/OSX</a>.
+
+## Play
+
+<a href="http://therefactory.bplaced.net/data/nomoore">http://therefactory.bplaced.net/data/nomoore</a>
 
 ## Timelapse Video
 
