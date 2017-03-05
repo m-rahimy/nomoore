@@ -208,7 +208,7 @@ public class CutsceneModernTimes extends ScreenAdapter {
 			message = "Drawing is my passion.";
 		}
 		if (numTouches == 1) {
-			message = "But everyone hates me for it.";
+			message = "But everyone hates me for that.";
 		} else if (numTouches == 2) {
 			message = "They all want me to do something else.";
 		} else if (numTouches == 3) {
