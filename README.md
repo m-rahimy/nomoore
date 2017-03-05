@@ -18,11 +18,9 @@ App now available on Google Play Store.
 
 <a href="https://goo.gl/Lza6Z7"><img src="http://therefactory.bplaced.net/img/google-play-badge.png" width="180"></a>
 
-Or download the <a href="dist/nO%20mooRe.zip?raw=true">Java Version for Windows/Linux/OSX</a>.
+Download the <a href="dist/nO%20mooRe.zip?raw=true">Java Version for Windows/Linux/OSX</a>.
 
-## Play
-
-<a href="http://therefactory.bplaced.net/data/nomoore">http://therefactory.bplaced.net/data/nomoore</a>
+Play the <a href="http://therefactory.bplaced.net/data/nomoore">web version</a>.
 
 ## Timelapse Video
 
