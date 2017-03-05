@@ -81,7 +81,6 @@ public class MyGdxGame extends Game {
 		font = new BitmapFont(Gdx.files.internal("fonts/amiga4everpro2.fnt"));
 
 		showModernTimesCutscene(); // start the game
-		// showGameScreen();
 	}
 
 	private void showModernTimesCutscene() {
@@ -132,6 +131,10 @@ public class MyGdxGame extends Game {
 		// sr.dispose();
 		font.dispose();
 		Gdx.app.exit();
+	}
+
+	public void setHasShownStoneAgeCutscene(boolean hasShownStoneAgeCutScene) {
+		gameScreen.setHastShownStoneAgeCutscene(hasShownStoneAgeCutScene);
 	}
 
 }

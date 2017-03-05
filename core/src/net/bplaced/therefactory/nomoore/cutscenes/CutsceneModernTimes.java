@@ -188,19 +188,9 @@ public class CutsceneModernTimes extends ScreenAdapter {
 
 		// System.out.println(numFrames);
 
-		if (iCutMyself.getPosition() >= 2.425 && numTouches < 0 || iCutMyself.getPosition() >= 4.73 && numTouches < 1
-				|| iCutMyself.getPosition() >= 7.066 && numTouches < 2
-				|| iCutMyself.getPosition() >= 9.341 && numTouches < 3
-				|| iCutMyself.getPosition() >= 11.826 && numTouches < 4
-				|| iCutMyself.getPosition() >= 14.132 && numTouches < 5
-				|| iCutMyself.getPosition() >= 16.407 && numTouches < 6
-				|| dadFindsHer.getPosition() >= 0.052 && numTouches < 7
-				|| dadFindsHer.getPosition() >= 1.781 && numTouches < 8
-				|| dadFindsHer.getPosition() >= 3.584 && numTouches < 9
-				|| dadFindsHer.getPosition() >= 5.425 && numTouches < 10
-				|| dadFindsHer.getPosition() >= 8.309 && numTouches < 11
-				|| dadFindsHer.getPosition() >= 10.398 && numTouches < 12
-				|| dadFindsHer.getPosition() >= 12.571 && numTouches < 13
+		if (iCutMyself.getPosition() >= 2.425 && numTouches < 0 || iCutMyself.getPosition() >= 4.73 && numTouches < 1 || iCutMyself.getPosition() >= 7.066 && numTouches < 2 || iCutMyself.getPosition() >= 9.341 && numTouches < 3 || iCutMyself.getPosition() >= 11.826 && numTouches < 4
+				|| iCutMyself.getPosition() >= 14.132 && numTouches < 5 || iCutMyself.getPosition() >= 16.407 && numTouches < 6 || dadFindsHer.getPosition() >= 0.052 && numTouches < 7 || dadFindsHer.getPosition() >= 1.781 && numTouches < 8 || dadFindsHer.getPosition() >= 3.584 && numTouches < 9
+				|| dadFindsHer.getPosition() >= 5.425 && numTouches < 10 || dadFindsHer.getPosition() >= 8.309 && numTouches < 11 || dadFindsHer.getPosition() >= 10.398 && numTouches < 12 || dadFindsHer.getPosition() >= 12.571 && numTouches < 13
 				|| dadFindsHer.getPosition() >= 15.604 && numTouches < 14) {
 			numTouches++;
 		}
@@ -218,13 +208,13 @@ public class CutsceneModernTimes extends ScreenAdapter {
 			message = "Drawing is my passion.";
 		}
 		if (numTouches == 1) {
-			message = "But everyone hates me therefore.";
+			message = "But everyone hates me for it.";
 		} else if (numTouches == 2) {
 			message = "They all want me to do something else.";
 		} else if (numTouches == 3) {
 			message = "Nobody understands me.";
 		} else if (numTouches == 4) {
-			message = "I can not take it anymore.";
+			message = "I can't take it anymore.";
 		} else if (numTouches == 5) {
 			message = "I will end it all now.";
 		} else if (numTouches == 6) {

@@ -28,7 +28,7 @@ import net.bplaced.therefactory.nomoore.constants.Configuration;
 public class DesktopLauncher {
 	public static void main(String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		float scale = 2f;
+		float scale = 1f;
 		config.width = (int) (Configuration.WINDOW_WIDTH * scale);
 		config.height = (int) (Configuration.WINDOW_HEIGHT * scale);
 		config.title = "nO mooRe";

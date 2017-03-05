@@ -123,6 +123,7 @@ public class ScreenGame extends ScreenAdapter implements GestureListener {
 	private boolean dragsLeftHandle;
 	private boolean scaleFactorRising;
 	private boolean flinging;
+	private boolean hasShownStoneAgeCutScene;
 
 	private final Sprite spriteStar;
 	private final Sprite human1;
@@ -132,6 +133,7 @@ public class ScreenGame extends ScreenAdapter implements GestureListener {
 	private float blueness;
 	private float scaleFactor = 1;
 	private float velX;
+	private float panSpeedMultiplicator = 1;
 
 	private final float[] starPositionsX;
 	private final float[] starPositionsY;
@@ -259,7 +261,7 @@ public class ScreenGame extends ScreenAdapter implements GestureListener {
 		canvas.setConsumable(false);
 		interactablesModernTimes.add(canvas);
 
-		milk = new Interactable("packet of milk");
+		milk = new Interactable("carton of milk");
 		milk.setSprite(new Sprite(new Texture("sprites/milk.png")));
 		milk.setPosition(130, 50);
 		milk.setConsumable(false);
@@ -569,7 +571,7 @@ public class ScreenGame extends ScreenAdapter implements GestureListener {
 		}
 
 		// stars
-		if (gameOver || !(paintedBlack && paintedRed && paintedWhite)) {
+		if (!hasShownStoneAgeCutScene || gameOver) {
 			for (int i = 0; i < numStars; i++) {
 				starPositionsY[i] = starPositionsY[i] - starSpeeds[i] / 1000;
 				if (starPositionsY[i] < 50) {
@@ -578,7 +580,7 @@ public class ScreenGame extends ScreenAdapter implements GestureListener {
 			}
 		}
 
-		if (!gameOver && paintedBlack && paintedRed && paintedWhite)
+		if (hasShownStoneAgeCutScene && !gameOver && paintedBlack && paintedRed && paintedWhite)
 			message = "What a beautiful pain ting.";
 	}
 
@@ -778,7 +780,7 @@ public class ScreenGame extends ScreenAdapter implements GestureListener {
 						interactablesStoneAge.removeValue(straw, true);
 						interactablesMedieval.removeValue(straw, true);
 						selectedItemInInventory = null;
-						message = "The fire is still glowing too weak.";
+						message = "The fire is still glowing too weakly.";
 						fireIsGlowingWeakly = true;
 						renderSmallFire = true;
 						soundFireIgnited.play();
@@ -832,7 +834,7 @@ public class ScreenGame extends ScreenAdapter implements GestureListener {
 		if (iHaveBurned) {
 			message = "I have burned.";
 		} else if (fireIsGlowingWeakly) {
-			message = "The fire is still glowing too weak.";
+			message = "The fire is still glowing too weakly.";
 		} else {
 			message = "I want to burn, but something is missing..";
 		}
@@ -852,7 +854,7 @@ public class ScreenGame extends ScreenAdapter implements GestureListener {
 							message = "What a beautiful pain ting.";
 						} else if (paintedBlack && paintedRed && paintedWhite) {
 							soundSecretFound.play();
-							message = "..";
+							message = "What a beautiful pain ting.";
 							moore.setVisible(true);
 							showStoneAgeCutscene = true;
 							canvas.setConsumable(false);
@@ -942,6 +944,7 @@ public class ScreenGame extends ScreenAdapter implements GestureListener {
 		super.show();
 		if (paintedBlack && paintedRed && paintedWhite) {
 			musicCreepy.play();
+			panSpeedMultiplicator = .0001f;
 		} else {
 			if (!musicMainTheme.isPlaying())
 				musicMainTheme.play();
@@ -969,6 +972,13 @@ public class ScreenGame extends ScreenAdapter implements GestureListener {
 	@Override
 	public boolean touchDown(float x, float y, int pointer, int button) {
 		flinging = false;
+		if (showMedievalCutscene) {
+			showMedievalCutscene = false;
+			myGdxGame.showMedievalCutscene();
+		} else if (showStoneAgeCutscene) {
+			showStoneAgeCutscene = false;
+			myGdxGame.showStoneAgeCutscene();
+		}
 		return false;
 	}
 
@@ -978,14 +988,6 @@ public class ScreenGame extends ScreenAdapter implements GestureListener {
 		if (gameOver) {
 			numTouches++;
 			return true;
-		}
-
-		if (showMedievalCutscene) {
-			showMedievalCutscene = false;
-			myGdxGame.showMedievalCutscene();
-		} else if (showStoneAgeCutscene) {
-			showStoneAgeCutscene = false;
-			myGdxGame.showStoneAgeCutscene();
 		}
 
 		touchCoordinates.set(x, y);
@@ -1041,6 +1043,7 @@ public class ScreenGame extends ScreenAdapter implements GestureListener {
 			showMooresDrawing = false;
 		}
 		deltaX *= viewport.getWorldWidth() / (float) viewport.getScreenWidth();
+		deltaX *= panSpeedMultiplicator;
 		dragsLeftHandle = rectangleLeftHandle.getX() > 0 || rectangleLeftHandle.getX() == 0 && rectangleRightHandle.getX() >= textureMedieval.getWidth() && deltaX > 0;
 		dragsRightHandle = !dragsLeftHandle;
 		if (dragsLeftHandle) {
@@ -1072,5 +1075,9 @@ public class ScreenGame extends ScreenAdapter implements GestureListener {
 	@Override
 	public void pinchStop() {
 		// TODO Auto-generated method stub
+	}
+
+	public void setHastShownStoneAgeCutscene(boolean hasShownStoneAgeCutScene) {
+		this.hasShownStoneAgeCutScene = hasShownStoneAgeCutScene;
 	}
 }

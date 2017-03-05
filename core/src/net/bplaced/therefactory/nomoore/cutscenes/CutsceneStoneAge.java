@@ -186,17 +186,9 @@ public class CutsceneStoneAge extends ScreenAdapter implements InputProcessor {
 		if (paused)
 			return;
 
-		if (musicStoneAge.getPosition() >= 3.278 && numTouches < 1
-				|| musicStoneAge.getPosition() >= 6.429 && numTouches < 2
-				|| musicStoneAge.getPosition() >= 9.627 && numTouches < 3
-				|| musicStoneAge.getPosition() >= 12.841 && numTouches < 4
-				|| musicStoneAge.getPosition() >= 14.58 && numTouches < 5
-				|| musicStoneAge.getPosition() >= 16.04 && numTouches < 6
-				|| musicStoneAge.getPosition() >= 17.655 && numTouches < 7
-				|| musicStoneAge.getPosition() >= 19.2 && numTouches < 8
-				|| musicStoneAge.getPosition() >= 20.87 && numTouches < 9
-				|| musicStoneAge.getPosition() >= 22.48 && numTouches < 10
-				|| musicStoneAge.getPosition() >= 25.395 && numTouches < 11) {
+		if (musicStoneAge.getPosition() >= 3.278 && numTouches < 1 || musicStoneAge.getPosition() >= 6.429 && numTouches < 2 || musicStoneAge.getPosition() >= 9.627 && numTouches < 3 || musicStoneAge.getPosition() >= 12.85 && numTouches < 4 || musicStoneAge.getPosition() >= 14.5 && numTouches < 5
+				|| musicStoneAge.getPosition() >= 16.08 && numTouches < 6 || musicStoneAge.getPosition() >= 17.643 && numTouches < 7 || musicStoneAge.getPosition() >= 19.21 && numTouches < 8 || musicStoneAge.getPosition() >= 20.87 && numTouches < 9
+				|| musicStoneAge.getPosition() >= 22.5 && numTouches < 10 || musicStoneAge.getPosition() >= 25.4 && numTouches < 11) {
 			numTouches++;
 		}
 
@@ -227,6 +219,7 @@ public class CutsceneStoneAge extends ScreenAdapter implements InputProcessor {
 		}
 		if (numTouches >= 11 && !musicStoneAge.isPlaying()) {
 			dispose();
+			myGdxGame.setHasShownStoneAgeCutscene(true);
 			myGdxGame.showGameScreen();
 		}
 	}

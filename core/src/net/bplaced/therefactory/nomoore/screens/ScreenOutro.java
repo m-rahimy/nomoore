@@ -87,9 +87,7 @@ public class ScreenOutro extends ScreenAdapter {
 	}
 
 	private void update() {
-		if (theEnd.getPosition() >= 5.96 && numTouches < 1 || theEnd.getPosition() >= 9.771 && numTouches < 2
-				|| theEnd.getPosition() >= 13.565 && numTouches < 3
-				|| theEnd.getPosition() >= 17.899 && numTouches < 4) {
+		if (theEnd.getPosition() >= 5.96 && numTouches < 1 || theEnd.getPosition() >= 9.771 && numTouches < 2 || theEnd.getPosition() >= 13.565 && numTouches < 3 || theEnd.getPosition() >= 17.93 && numTouches < 4) {
 			numTouches++;
 		}
 
