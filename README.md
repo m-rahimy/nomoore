@@ -4,7 +4,7 @@
 
 [![version](https://img.shields.io/badge/version-1.3-2095ff.svg)](CHANGELOG.md)
 [![license](https://img.shields.io/badge/license-GPL--3.0-2095ff.svg)](LICENSE.md)
-[![download](https://img.shields.io/badge/download-play store-2095ff.svg)](https://goo.gl/Lza6Z7)
+[![download](https://img.shields.io/badge/download-playstore-2095ff.svg)](https://goo.gl/Lza6Z7)
 
 A short game about a girl who is not allowed to follow her dreams. Her name is Moore and her passion is drawing. She is in One Room that does not change, but time does..
 
