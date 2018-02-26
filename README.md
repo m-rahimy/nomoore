@@ -1,4 +1,4 @@
-# nO mooRe <img src="excluded-resources/ic_launcher2.png" height="32"> <a href="https://www.youtube.com/channel/UCShL6kEbNc02XjA89zsrtDQ"><img src="https://www.youtube.com/yt/brand/media/image/YouTube-icon-full_color.png" height="32px" align="right"></a>
+# nO mooRe <img src="excluded-resources/ic_launcher2.png" height="32"> <a href="https://www.youtube.com/channel/UCShL6kEbNc02XjA89zsrtDQ"><img src="http://therefactory.bplaced.net/img/youtube_hover.png" height="32px" align="right"></a>
 
 *One Room that doesn't change, but time does... Made in 48h for Ludum Dare 37.*
 
