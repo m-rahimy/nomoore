@@ -1,10 +1,10 @@
-# nO mooRe <img src="excluded-resources/ic_launcher2.png" height="32"> <a href="https://www.youtube.com/channel/UCShL6kEbNc02XjA89zsrtDQ"><img src="https://www.youtube.com/yt/brand/media/image/YouTube-icon-full_color.png" height="32px" align="right"></a>
+# nO mooRe <img src="excluded-resources/ic_launcher2.png" height="32"> <a href="https://www.youtube.com/channel/UCShL6kEbNc02XjA89zsrtDQ"><img src="http://therefactory.bplaced.net/img/youtube_hover.png" height="32px" align="right"></a>
 
 *One Room that doesn't change, but time does... Made in 48h for Ludum Dare 37.*
 
 [![version](https://img.shields.io/badge/version-1.3-2095ff.svg)](CHANGELOG.md)
 [![license](https://img.shields.io/badge/license-GPL--3.0-2095ff.svg)](LICENSE.md)
-[![download](https://img.shields.io/badge/download-play store-2095ff.svg)](https://goo.gl/Lza6Z7)
+[![download](https://img.shields.io/badge/download-playstore-2095ff.svg)](https://goo.gl/Lza6Z7)
 
 A short game about a girl who is not allowed to follow her dreams. Her name is Moore and her passion is drawing. She is in One Room that does not change, but time does..
 
@@ -18,11 +18,9 @@ App now available on Google Play Store.
 
 <a href="https://goo.gl/Lza6Z7"><img src="http://therefactory.bplaced.net/img/google-play-badge.png" width="180"></a>
 
-Or download the <a href="dist/nO%20mooRe.zip?raw=true">Java Version for Windows/Linux/OSX</a>.
+Download the <a href="dist/nO%20mooRe.zip?raw=true">Java Version for Windows/Linux/OSX</a>.
 
-## Play
-
-<a href="http://therefactory.bplaced.net/data/nomoore">http://therefactory.bplaced.net/data/nomoore</a>
+Play the <a href="http://therefactory.bplaced.net/data/nomoore">web version</a>.
 
 ## Timelapse Video
 
