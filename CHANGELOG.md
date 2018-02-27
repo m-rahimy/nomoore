@@ -1,6 +1,12 @@
 nO mooRe - Changelog
 =========
 
+### Version 1.4 - February 27, 2018
+
+* App icon updated
+* Updated to libGDX v1.9.8 with lots of fixes and improvements
+* Optimized for latest Android versions
+
 ### Version 1.3 - March 5, 2017
 
 * Improved synchronization between Animation and Music
