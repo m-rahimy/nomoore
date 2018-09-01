@@ -2,7 +2,7 @@
 
 *One Room that doesn't change, but time does... Made in 48h for Ludum Dare 37.*
 
-[![version](https://img.shields.io/badge/version-1.4-2095ff.svg)](CHANGELOG.md)
+[![version](https://img.shields.io/badge/version-1.5-2095ff.svg)](CHANGELOG.md)
 [![license](https://img.shields.io/badge/license-GPL--3.0-2095ff.svg)](LICENSE.md)
 [![download](https://img.shields.io/badge/download-playstore-2095ff.svg)](https://goo.gl/Lza6Z7)
 
