@@ -1,6 +1,14 @@
 nO mooRe - Changelog
 =========
 
+### Version 1.5 - September 1, 2018
+
+* Fixed audio bugs
+* Fixed synchronization bugs
+* Optimized for latest Android versions
+* Optimized for tablets
+* Added in-game download links
+
 ### Version 1.4 - February 27, 2018
 
 * App icon updated
