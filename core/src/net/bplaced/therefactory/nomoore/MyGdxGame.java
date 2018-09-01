@@ -36,105 +36,141 @@ import net.bplaced.therefactory.nomoore.cutscenes.CutsceneStoneAge;
 import net.bplaced.therefactory.nomoore.screens.ScreenGame;
 import net.bplaced.therefactory.nomoore.screens.ScreenOutro;
 import net.bplaced.therefactory.nomoore.utils.IAndroidInterface;
+import net.bplaced.therefactory.nomoore.utils.MediaManager;
 
 public class MyGdxGame extends Game {
 
-	private IAndroidInterface androidInterface;
-	public OrthographicCamera camera;
-	public BitmapFont font;
-	public FitViewport viewport;
-	public SpriteBatch batch;
-	public ShapeRenderer sr;
-	public Sprite fade;
+    private IAndroidInterface androidInterface;
+    public OrthographicCamera camera;
+    public BitmapFont font;
+    public FitViewport viewport;
+    public SpriteBatch batch;
+    public ShapeRenderer sr;
+    public Sprite fade;
 
-	private CutsceneMedieval cutsceneMedieval;
-	private CutsceneStoneAge cutsceneStoneAge;
-	private CutsceneModernTimes cutsceneModernTimes;
+    private CutsceneMedieval cutsceneMedieval;
+    private CutsceneStoneAge cutsceneStoneAge;
+    private CutsceneModernTimes cutsceneModernTimes;
 
-	private ScreenGame gameScreen;
-	private ScreenOutro outroScreen;
+    private ScreenGame gameScreen;
+    private ScreenOutro outroScreen;
 
-	public MyGdxGame(IAndroidInterface androidInterface) {
-		this();
-		this.androidInterface = androidInterface;
-	}
+    private String[] soundsToPreload = new String[]{
+            "music/knifeDrop.mp3",
+            "music/tusch.mp3",
+            "music/slap.mp3",
+            "music/secretFound.mp3",
+            "music/cut.mp3",
+            "music/fireIgnited.mp3",
+            "music/item_pickup.mp3",
+            "music/iHavePaintedTheStone_sound.mp3",
+    };
 
-	public MyGdxGame() {
-	}
+    private String[] musicToPreload = new String[]{
+            "music/iHavePaintedTheStone.mp3",
+            "music/1_iCutMyself.mp3",
+            "music/2_dadFindsHer.mp3",
+            "music/3_mainTheme.mp3",
+            "music/4_mittelalter.mp3",
+            "music/5_steinzeit.mp3",
+            "music/6_theEnd.mp3",
+            "music/iHaveBurned.mp3",
+            "music/creepyDrums.mp3",
+    };
 
-	@Override
-	public void create() {
-		if (androidInterface != null)
-			androidInterface.tryToStopMusicApp();
+    public MyGdxGame(IAndroidInterface androidInterface) {
+        this();
+        this.androidInterface = androidInterface;
+    }
 
-		batch = new SpriteBatch();
-		sr = new ShapeRenderer();
+    public MyGdxGame() {
+    }
 
-		camera = new OrthographicCamera();
-		viewport = new FitViewport(Configuration.WINDOW_WIDTH, Configuration.WINDOW_HEIGHT, camera);
-		camera.position.set(viewport.getWorldWidth() / 2 - (viewport.getWorldWidth() - 500) / 2, viewport.getWorldHeight() / 2 - (viewport.getWorldHeight() - 220) / 2, 0);
-		camera.update();
+    @Override
+    public void create() {
+        if (androidInterface != null) {
+            androidInterface.tryToStopMusicApp();
+        }
 
-		fade = new Sprite(new Texture("sprites/fade.png"));
-		fade.setBounds(0, -100, viewport.getWorldWidth(), viewport.getWorldHeight() - 40);
+        preloadAudio();
 
-		font = new BitmapFont(Gdx.files.internal("fonts/amiga4everpro2.fnt"));
+        batch = new SpriteBatch();
+        sr = new ShapeRenderer();
 
-		showModernTimesCutscene(); // start the game
-	}
+        camera = new OrthographicCamera();
+        viewport = new FitViewport(Configuration.WINDOW_WIDTH, Configuration.WINDOW_HEIGHT, camera);
+        camera.position.set(viewport.getWorldWidth() / 2 - (viewport.getWorldWidth() - 500) / 2, viewport.getWorldHeight() / 2 - (viewport.getWorldHeight() - 220) / 2, 0);
+        camera.update();
 
-	private void showModernTimesCutscene() {
-		if (cutsceneModernTimes == null)
-			cutsceneModernTimes = new CutsceneModernTimes(this);
-		setScreen(cutsceneModernTimes);
-	}
+        fade = new Sprite(new Texture("sprites/fade.png"));
+        fade.setBounds(0, -100, viewport.getWorldWidth(), viewport.getWorldHeight() - 40);
 
-	public void showGameScreen() {
-		if (gameScreen == null)
-			gameScreen = new ScreenGame(this);
-		setScreen(gameScreen);
-	}
+        font = new BitmapFont(Gdx.files.internal("fonts/amiga4everpro2.fnt"));
 
-	public void showMedievalCutscene() {
-		if (cutsceneMedieval == null)
-			cutsceneMedieval = new CutsceneMedieval(this);
-		setScreen(cutsceneMedieval);
-	}
+        showModernTimesCutscene(); // start the game
+    }
 
-	public void showStoneAgeCutscene() {
-		if (cutsceneStoneAge == null)
-			cutsceneStoneAge = new CutsceneStoneAge(this);
-		if (gameScreen != null)
-			gameScreen.cleanUpMainThemeMusic();
-		setScreen(cutsceneStoneAge);
-	}
+    private void preloadAudio() {
+        for (String assetPath : soundsToPreload) {
+            MediaManager.preloadSound(assetPath);
+        }
+        for (String assetPath : musicToPreload) {
+            MediaManager.preloadMusic(assetPath);
+        }
+    }
 
-	public void showOutroScreen() {
-		if (outroScreen == null)
-			outroScreen = new ScreenOutro(this);
-		if (gameScreen != null)
-			gameScreen.cleanUpMainThemeMusic();
-		setScreen(outroScreen);
-	}
+    private void showModernTimesCutscene() {
+        if (cutsceneModernTimes == null)
+            cutsceneModernTimes = new CutsceneModernTimes(this);
+        setScreen(cutsceneModernTimes);
+    }
 
-	public void shutdown() {
-		if (gameScreen != null)
-			gameScreen.dispose();
-		if (cutsceneModernTimes != null)
-			cutsceneModernTimes.dispose();
-		if (cutsceneMedieval != null)
-			cutsceneMedieval.dispose();
-		if (cutsceneStoneAge != null)
-			cutsceneStoneAge.dispose();
-		if (outroScreen != null)
-			outroScreen.dispose();
-		// sr.dispose();
-		font.dispose();
-		Gdx.app.exit();
-	}
+    public void showGameScreen() {
+        if (gameScreen == null)
+            gameScreen = new ScreenGame(this);
+        setScreen(gameScreen);
+    }
 
-	public void setHasShownStoneAgeCutscene(boolean hasShownStoneAgeCutScene) {
-		gameScreen.setHastShownStoneAgeCutscene(hasShownStoneAgeCutScene);
-	}
+    public void showMedievalCutscene() {
+        if (cutsceneMedieval == null)
+            cutsceneMedieval = new CutsceneMedieval(this);
+        setScreen(cutsceneMedieval);
+    }
+
+    public void showStoneAgeCutscene() {
+        if (cutsceneStoneAge == null)
+            cutsceneStoneAge = new CutsceneStoneAge(this);
+        if (gameScreen != null)
+            gameScreen.cleanUpMainThemeMusic();
+        setScreen(cutsceneStoneAge);
+    }
+
+    public void showOutroScreen() {
+        if (outroScreen == null)
+            outroScreen = new ScreenOutro(this);
+        if (gameScreen != null)
+            gameScreen.cleanUpMainThemeMusic();
+        setScreen(outroScreen);
+    }
+
+    public void shutdown() {
+        if (gameScreen != null)
+            gameScreen.dispose();
+        if (cutsceneModernTimes != null)
+            cutsceneModernTimes.dispose();
+        if (cutsceneMedieval != null)
+            cutsceneMedieval.dispose();
+        if (cutsceneStoneAge != null)
+            cutsceneStoneAge.dispose();
+        if (outroScreen != null)
+            outroScreen.dispose();
+        // sr.dispose();
+        font.dispose();
+        Gdx.app.exit();
+    }
+
+    public void setHasShownStoneAgeCutscene(boolean hasShownStoneAgeCutScene) {
+        gameScreen.setHastShownStoneAgeCutscene(hasShownStoneAgeCutScene);
+    }
 
 }

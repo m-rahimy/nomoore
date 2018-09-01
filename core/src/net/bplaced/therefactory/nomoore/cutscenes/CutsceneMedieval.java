@@ -22,7 +22,6 @@ package net.bplaced.therefactory.nomoore.cutscenes;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -37,6 +36,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import net.bplaced.therefactory.nomoore.MyGdxGame;
+import net.bplaced.therefactory.nomoore.utils.MediaManager;
 import net.bplaced.therefactory.nomoore.utils.Particles;
 import net.bplaced.therefactory.nomoore.utils.Utils;
 
@@ -65,7 +65,6 @@ public class CutsceneMedieval extends ScreenAdapter implements InputProcessor {
 	private final Music iHaveBurned;
 	private final Sound slap;
 	private boolean slapPlayed;
-	private AssetManager assetManager;
 	private boolean mittelalterPlayed;
 
 	public CutsceneMedieval(MyGdxGame myGdxGame) {
@@ -87,18 +86,10 @@ public class CutsceneMedieval extends ScreenAdapter implements InputProcessor {
 		girldBurned3 = new Sprite(new Texture("sprites/girl_burned3.png"));
 		girldBurned4 = new Sprite(new Texture("sprites/girl_burned4.png"));
 
-		assetManager = new AssetManager();
-		assetManager.load("music/tusch.mp3", Sound.class);
-		assetManager.load("music/iHaveBurned.mp3", Music.class);
-		assetManager.load("music/slap.mp3", Sound.class);
-		assetManager.load("music/4_mittelalter.mp3", Music.class);
-
-		assetManager.finishLoading();
-
-		slap = assetManager.get("music/slap.mp3", Sound.class);
-		tusch = assetManager.get("music/tusch.mp3", Sound.class);
-		mittelalter = assetManager.get("music/4_mittelalter.mp3", Music.class);
-		iHaveBurned = assetManager.get("music/iHaveBurned.mp3", Music.class);
+		slap = MediaManager.getSound("music/slap.mp3");
+		tusch = MediaManager.getSound("music/tusch.mp3");
+		mittelalter = MediaManager.getMusic("music/4_mittelalter.mp3");
+		iHaveBurned = MediaManager.getMusic("music/iHaveBurned.mp3");
 	}
 
 	@Override
@@ -172,7 +163,6 @@ public class CutsceneMedieval extends ScreenAdapter implements InputProcessor {
 
 	private void update() {
 		if (numTouches >= 9 && iHaveBurned.getPosition() > 6.1f) {
-			dispose();
 			myGdxGame.showGameScreen();
 		}
 
@@ -279,16 +269,5 @@ public class CutsceneMedieval extends ScreenAdapter implements InputProcessor {
 	@Override
 	public void resize(int width, int height) {
 		viewport.update(width, height);
-	}
-
-	@Override
-	public void dispose() {
-		super.dispose();
-		slap.dispose();
-		mittelalter.dispose();
-		iHaveBurned.dispose();
-		tusch.dispose();
-		particles.dispose();
-		// assetManager.dispose();
 	}
 }

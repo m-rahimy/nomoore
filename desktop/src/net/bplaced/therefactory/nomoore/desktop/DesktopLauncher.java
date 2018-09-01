@@ -26,15 +26,16 @@ import net.bplaced.therefactory.nomoore.MyGdxGame;
 import net.bplaced.therefactory.nomoore.constants.Configuration;
 
 public class DesktopLauncher {
-	public static void main(String[] arg) {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		float scale = 1f;
-		config.width = (int) (Configuration.WINDOW_WIDTH * scale);
-		config.height = (int) (Configuration.WINDOW_HEIGHT * scale);
-		config.title = "nO mooRe";
-		//config.fullscreen = true;
-		config.vSyncEnabled = true;
-		config.resizable = false;
-		new LwjglApplication(new MyGdxGame(), config);
-	}
+    public static void main(String[] arg) {
+        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        float scale = 2f;
+        config.x = 2000;
+        config.width = (int) (Configuration.WINDOW_WIDTH * scale);
+        config.height = (int) (Configuration.WINDOW_HEIGHT * scale);
+        config.title = "nO mooRe";
+        //config.fullscreen = true;
+        config.vSyncEnabled = true;
+        config.resizable = true;
+        new LwjglApplication(new MyGdxGame(), config);
+    }
 }

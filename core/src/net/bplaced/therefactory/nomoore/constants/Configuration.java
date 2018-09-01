@@ -21,9 +21,12 @@ package net.bplaced.therefactory.nomoore.constants;
 
 public class Configuration {
 
-	public static final int WINDOW_WIDTH = 640;
-	public static final int WINDOW_HEIGHT = 360;
-	public static final float ANIMATION_SPEED_OF_BREATHING_SKYCOLOR = .001f;
-	public static final int NUM_STARS = 30;
+    public static final int WINDOW_WIDTH = 640;
+    public static final int WINDOW_HEIGHT = 360;
+    public static final float ANIMATION_SPEED_OF_BREATHING_SKYCOLOR = .001f;
+    public static final int NUM_STARS = 30;
+
+    public static String GooglePlayStorePageURI = "https://play.google.com/store/apps/details?id=net.bplaced.therefactory.nomoore";
+    public static String SoundtrackURI = "https://youtu.be/k1211S-qUOw";
 
 }

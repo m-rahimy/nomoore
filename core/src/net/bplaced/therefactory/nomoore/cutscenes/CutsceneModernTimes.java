@@ -21,7 +21,6 @@ package net.bplaced.therefactory.nomoore.cutscenes;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -35,6 +34,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import net.bplaced.therefactory.nomoore.MyGdxGame;
+import net.bplaced.therefactory.nomoore.utils.MediaManager;
 import net.bplaced.therefactory.nomoore.utils.Utils;
 
 public class CutsceneModernTimes extends ScreenAdapter {
@@ -63,7 +63,6 @@ public class CutsceneModernTimes extends ScreenAdapter {
 	private final Sound knifeDrop;
 	private boolean alreadyPlayed = true;
 	private boolean knifeDropPlayed;
-	private AssetManager assetManager;
 
 	public CutsceneModernTimes(MyGdxGame myGdxGame) {
 		this.myGdxGame = myGdxGame;
@@ -83,18 +82,10 @@ public class CutsceneModernTimes extends ScreenAdapter {
 		girlStabbed3 = new Sprite(new Texture("sprites/girl_stabbed3.png"));
 		girlStabbed4 = new Sprite(new Texture("sprites/girl_stabbed4.png"));
 
-		assetManager = new AssetManager();
-		assetManager.load("music/1_iCutMyself.mp3", Music.class);
-		assetManager.load("music/2_dadFindsHer.mp3", Music.class);
-		assetManager.load("music/iHavePaintedTheStone.mp3", Music.class);
-		assetManager.load("music/knifeDrop.mp3", Sound.class);
-
-		assetManager.finishLoading();
-
-		iCutMyself = assetManager.get("music/1_iCutMyself.mp3", Music.class);
-		dadFindsHer = assetManager.get("music/2_dadFindsHer.mp3", Music.class);
-		iHavePaintedTheStone = assetManager.get("music/iHavePaintedTheStone.mp3", Music.class);
-		knifeDrop = assetManager.get("music/knifeDrop.mp3", Sound.class);
+        iCutMyself = MediaManager.getMusic("music/1_iCutMyself.mp3");
+        dadFindsHer = MediaManager.getMusic("music/2_dadFindsHer.mp3");
+        iHavePaintedTheStone = MediaManager.getMusic("music/iHavePaintedTheStone.mp3");
+        knifeDrop = MediaManager.getSound("music/knifeDrop.mp3");
 	}
 
 	@Override
@@ -176,7 +167,6 @@ public class CutsceneModernTimes extends ScreenAdapter {
 			iCutMyself.play();
 		}
 		if (numTouches >= 14 && dadFindsHer.getPosition() > 20) {
-			dispose();
 			myGdxGame.showGameScreen();
 		}
 		if (paused && iCutMyself.isPlaying()) {
@@ -235,16 +225,6 @@ public class CutsceneModernTimes extends ScreenAdapter {
 	@Override
 	public void resize(int width, int height) {
 		viewport.update(width, height);
-	}
-
-	@Override
-	public void dispose() {
-		super.dispose();
-		iCutMyself.dispose();
-		iHavePaintedTheStone.dispose();
-		dadFindsHer.dispose();
-		knifeDrop.dispose();
-		// assetManager.dispose();
 	}
 
 }
